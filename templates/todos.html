@@ -1,0 +1,185 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo-List</title>
+    <link rel="stylesheet" href="{% static 'todo.css' %}">
+</head>
+<body>
+
+    <div class="heading">
+        <h1>Todo List</h1>
+    </div>
+    <div class="add-todo">
+        <form action="add-todo" method="post">
+            {% csrf_token %}
+            <input type="text" name="todo-name" placeholder="Todo" required>
+            <select name="priority" id="prior">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <input type="submit" value="Add">
+        </form>
+    </div>
+
+
+    <div class="todo-list">
+        {% if todos.count == 0 %}
+            <h2
+            style="margin-top:15px;
+                font-size:30px;
+                color:whitesmoke;
+                background:var(--bgcolor2);
+                border-radius:4px;
+            "
+            >
+                No Todos Added</h2>
+        {% else %}
+        {% for todo in todos%}
+        
+
+
+        {% if todo.priority == 1%}
+            {% if todo.completed == 1%}
+                <li class="todo" id="todo-li"   style="color:var(--fontcolor); background:var(--completed)">
+                    <p class="name" style="text-decoration:line-through ;">
+            {{todo.name}}
+        </p>  
+            {%else%}
+                <li class="todo" id="todo-li" style="background: var(--priority1);">
+                    <p class="name" style="text-decoration:none ;">
+            {{todo.name}}
+        </p>  
+            {%endif %}
+        {%endif%}
+
+        {% if todo.priority == 2%}
+            {% if todo.completed == 1%}
+                <li class="todo" id="todo-li" style="color:var(--fontcolor); background:var(--completed)"> 
+                    <p class="name" style="text-decoration:line-through ;">
+            {{todo.name}}
+        </p> 
+            {%else%}
+                <li class="todo" id="todo-li" style="background: var(--priority2);"> 
+                    <p class="name" style="text-decoration:none ;">
+            {{todo.name}}
+        </p> 
+            {%endif%}
+        {%endif%}
+
+
+        {% if todo.priority == 3%}
+            {% if todo.completed == 1%}
+                <li class="todo" id="todo-li" style="color:var(--fontcolor); background:var(--completed)"> 
+                    <p class="name" style="text-decoration:line-through ;">
+            {{todo.name}}
+        </p> 
+            {%else%}
+                <li class="todo" id="todo-li" style="background: var(--priority3);"> 
+                    <p class="name" style="text-decoration:none ;">
+            {{todo.name}}
+        </p> 
+            {%endif%}
+        {%endif%}
+        
+        {% if todo.priority == 4%}
+            {% if todo.completed == 1%}
+                <li class="todo" id="todo-li" style="color:var(--fontcolor); background:var(--completed)"> 
+                    <p class="name" style="text-decoration:line-through ;">
+            {{todo.name}}
+        </p> 
+            {%else%}
+                <li class="todo" id="todo-li" style="background:var(--priority4) ;"> 
+                    <p class="name" style="text-decoration:none ;">
+            {{todo.name}}
+        </p> 
+            {%endif%}
+        {%endif%}
+        
+        <!-- <p class="name" style="text-decoration:line-through ;">
+            {{todo.name}}
+        </p> 
+        <p class="name" style="text-decoration:none ;">
+            {{todo.name}}
+        </p>  -->
+        <span class="btns">
+            <!-- <form action="/completed/{{todo.id}}"> -->
+                <!-- {%csrf_token%} -->
+                {% if todo.completed == True%}
+                <a id="checked" href="/incompleted/{{todo.id}}" style="text-decoration: none;">✅</a>
+                <!-- <input class="check-box" type="checkbox" checked onchange="incomplete({{todo.id}},{{forloop.counter}},{{todo.priority}});" name="completed" id="completed"> -->
+                {%else%}
+                <a id="pending" href="/completed/{{todo.id}}" style="text-decoration: none;">🧭</a>
+                <!-- <input class="check-box" type="checkbox"  onchange="complete({{todo.id}},{{forloop.counter}});" name="completed" id="completed"> -->
+                {%endif%}
+            <!-- </form> -->
+            <!-- <form action="/delete/{{todo.id}}" method="POST"></ -->
+                <!-- {%csrf_token%} -->
+                <a id="delet-btn" href="/delete/{{todo.id}}"  ></a>
+         </li>  
+        </span>
+    {% endfor %}
+   
+    {%endif%}
+
+</div>
+    
+<script>
+    var csrftoken = '{{ csrf_token }}';
+    //console.log('js is here.')
+    function reload(){
+        location.reload()
+    }
+    function  complete(id,count){
+        let todo = document.getElementsByClassName("todo")[count-1];
+        todo.style = "text-decoration:line-through ;color:var(--fontcolor); background:var(--completed)";
+        console.log('checking');
+        const Http = new XMLHttpRequest();
+        const url= 'http://127.0.0.1:8000/completed/'+id;
+        Http.open("POST", url);
+        //console.log(url);
+        Http.send()
+//        let change = (res) => Http.send();
+        //let add = (x,y) => x + y;
+        reload()
+
+    }
+    function incomplete(id,count,priority){
+        let todo = document.getElementsByClassName("todo")[count-1];
+
+        switch(priority){
+            case 1:
+            todo.style = "text-decoration:none ;color:var(--fontcolor);background:var(--priority1);";
+            break
+            case 2:
+            todo.style = "text-decoration:none ;color:var(--fontcolor);background:var(--priority2);";
+            break
+            case 3:
+            todo.style = "text-decoration:none ;color:var(--fontcolor);background:var(--priority3);";
+            break
+            case 4:
+            todo.style = "text-decoration:none ;color:var(--fontcolor);background:var(--priority4)";
+            break
+        }
+
+       
+        console.log('unchecking...')
+        const Http = new XMLHttpRequest();
+        const url= 'http://127.0.0.1:8000/incompleted/'+id;
+        Http.open("POST", url);
+        console.log(url);
+        Http.send();
+        reload()
+        //setTimeout(location.reload(), 3000);
+        //location.reload();
+    }
+
+</script>
+
+</body>
+</html>
