@@ -7,4 +7,3 @@ class TodoAdmin(admin.ModelAdmin):
     list_display = ('name','priority','completed')
 
 admin.site.register(Todo,TodoAdmin)
-

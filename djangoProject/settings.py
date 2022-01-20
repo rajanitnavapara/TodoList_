@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_email_verification',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,28 @@ STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+def verified_callback(user):
+    user.is_active = True
+
+
+#Email Verification
+EMAIL_VERIFIED_CALLBACK = verified_callback
+EMAIL_FROM_ADDRESS = 'noreply@aliasaddress.com'
+EMAIL_MAIL_SUBJECT = 'Confirm your email'
+EMAIL_MAIL_HTML = 'EmailVerification/mail_body.html'
+EMAIL_MAIL_PLAIN = 'EmailVerification/mail_body.txt'
+EMAIL_TOKEN_LIFE = 60 * 60
+EMAIL_PAGE_TEMPLATE = 'EmailVerification/confirm_template.html'
+EMAIL_PAGE_DOMAIN = 'http://localhost:8000/'
+EMAIL_MULTI_USER = True  # optional (defaults to False)
+
+# For Django Email Backend
+EMAIL_ACTIVE_FIELD = 'is_active'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'rajanitnavapara7777@gmail.com'
+EMAIL_HOST_PASSWORD = 'zqeywziiqtuhksmd'  # os.environ['password_key'] suggested
+EMAIL_USE_TLS = True

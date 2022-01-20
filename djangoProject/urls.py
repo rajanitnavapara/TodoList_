@@ -19,5 +19,7 @@ from django.urls.conf import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('TodoList.urls'))
+    path('',include('TodoList.urls')),
+    path('verify/',include('EmailVerification.urls')),
+    
 ]

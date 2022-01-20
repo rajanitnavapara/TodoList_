@@ -1,0 +1,44 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'sign_in.css' %}">
+    <title>
+        Authenticate User
+    </title>
+</head>
+
+
+<body>
+    
+
+    <div class="login-box">
+    <div class="inform box" id="inform">
+        {% if msg %}
+        <p>{{msg}}</p>
+        {% endif %}
+      <form action="/auth" method="POST">
+          
+          {%csrf_token%}
+          {% if user_not_found %}
+          <!-- <p style="color: white; z-index:1">User <span style="color:#1abc9c;">{{username}}</span> </p> -->
+          <p style="color: white; z-index:1"> Username or Password in invalid. </p>
+          {% endif %}
+      <h1>Sign in</h1>
+      <input type="text"  name="username" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <input id="sub" type="submit" value="sign in">
+    </form>
+    <p>If you wanna <a href="/reg-user">sign Up</a></p>
+  </div>
+  
+  <!-- <script>
+    var modal1 = document.getElementById('inform');
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal1) {
+            modal1.style.display = "block";
+        }
+    }
+  </script> -->
+
+</body>

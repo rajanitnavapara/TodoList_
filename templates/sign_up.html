@@ -1,0 +1,40 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'sign_in.css' %}">
+    <title>
+        Authenticate User
+    </title>
+</head>
+
+<body>
+    
+
+<div class="login-box">
+
+    <div class="inform box" id="inform">
+      <form action="/verify/signup" method="POST">
+          {%csrf_token%}
+      <h1>Sign Up</h1>
+      <input type="text"  name="username" placeholder="Username" required>
+      <input type="text"  name="email" placeholder="Email" required>
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <input type="password" id="cpassword" name="cpassword" placeholder="Confirm Password" required>
+      <p><input type="checkbox" name="checkbox" id="checkbox" onchange="checkPassword(password.value,cpassword.value)"> I confirm all details and sign up</p> 
+      <input id="sub" type="submit"  value="sign up">
+      <p>If you wanna <a href="/auth">sign in</a></p>
+    </form>
+    </div>
+  </div>
+
+  <script>
+    function checkPassword(pass1,pass2){
+      console.log(pass1,pass2,pass1!=pass2)
+      if (pass1 != pass2) { 
+        alert("Your password and confirmation password do not match.");
+        cpassword.focus();
+        document.getElementById('checkbox').checked = false;
+
+      }
+    }
+  </script>
+</body>
