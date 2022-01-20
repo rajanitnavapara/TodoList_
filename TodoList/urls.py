@@ -3,7 +3,7 @@ from . import views
 from django_email_verification import urls as mail_urls
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.todoList, name='todo'),
     path('todo-list', views.todoList, name='ToDoList' ),
     path('add-todo', views.add_todo, name='add_todo'),
     path('delete/<str:pk>', views.delete_todo, name='delete_todo'),

@@ -31,7 +31,7 @@ body{
     font-weight: 500;
 }
 
-.box input[type="text"],.box input[type="password"]{
+.box input[type="text"],.box input[type="email"],.box input[type="password"] {
     border:0;
     background: none;
     width:270px;
@@ -45,12 +45,11 @@ body{
     color: white;
     transition: width 0.7s;
 }
-.box input[type="text"]:hover,.box input[type="password"]:hover{
-    border-color:white;
-    
-    
+.box input[type="text"]:hover,.box input[type="email"]:hover,.box input[type="password"]:hover{
+    border-color:white;    
 }
-.box input[type="text"]:focus,.box input[type="password"]:focus{
+
+.box input[type="text"]:focus,.box input[type="email"]:focus,.box input[type="password"]:focus{
     width: 250px;
     border-color:#1abc9c;
     

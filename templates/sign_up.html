@@ -12,11 +12,14 @@
 <div class="login-box">
 
     <div class="inform box" id="inform">
+      {% if msg %}
+        <p>{{msg}}</p>
+        {% endif %}
       <form action="/verify/signup" method="POST">
           {%csrf_token%}
       <h1>Sign Up</h1>
       <input type="text"  name="username" placeholder="Username" required>
-      <input type="text"  name="email" placeholder="Email" required>
+      <input type="email"  name="email" placeholder="Email"  required>
       <input type="password" id="password" name="password" placeholder="Password" required>
       <input type="password" id="cpassword" name="cpassword" placeholder="Confirm Password" required>
       <p><input type="checkbox" name="checkbox" id="checkbox" onchange="checkPassword(password.value,cpassword.value)"> I confirm all details and sign up</p> 

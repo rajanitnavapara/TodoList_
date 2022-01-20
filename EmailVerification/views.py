@@ -27,30 +27,33 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def signup(request):  
     # save form in the memory not in database  
-    username = request.POST['username']
-    password = request.POST['password']
-    email = request.POST['email']
-    user = get_user_model().objects.create(username=username,password=password,email=email)
-    # user = request.user
-    user.is_active = False  
-    user.save()  
-    # to get the domain of the current site  
-    current_site = get_current_site(request)  
-    mail_subject = 'Activation link has been sent to your email id'  
-    message = render_to_string('EmailVerification/acc_active_email.html', {  
-        'user': user,  
-        'domain': current_site.domain,  
-        'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
-        'token':account_activation_token.make_token(user),  
-    })  
-    to_email = email
-    from_email = 'rajanitnavapara7777@gmail.com'
-    # email = EmailMessage(  
-    #             mail_subject, message, to=[to_email]  
-    # )  
-    # email.send()  
-    send_mail(mail_subject, message, from_email,[email], fail_silently=False,)
-    return HttpResponse('Please confirm your email address to complete the registration')  
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+        if User.objects.filter(username=username):
+            return render(request,'sign_up.html',{'msg': 'username already exist.'})
+        user = get_user_model().objects.create(username=username,password=password,email=email)
+        # user = request.user
+        user.is_active = False  
+        user.save()  
+        # to get the domain of the current site  
+        current_site = get_current_site(request)  
+        mail_subject = 'Activation link has been sent to your email id'  
+        message = render_to_string('EmailVerification/acc_active_email.html', {  
+            'user': user,  
+            'domain': current_site.domain,  
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+            'token':account_activation_token.make_token(user),  
+        })  
+        to_email = email
+        from_email = 'rajanitnavapara7777@gmail.com'
+        # email = EmailMessage(  
+        #             mail_subject, message, to=[to_email]  
+        # )  
+        # email.send()  
+        send_mail(mail_subject, message, from_email,[email], fail_silently=False,)
+        return HttpResponse('Please confirm your email address to complete the registration. <a href="/auth">Click here</a> to SignIn</p>')  
 
 # return render(request, 'signup.html', {'form': form})  
 
@@ -64,6 +67,8 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):  
         user.is_active = True  
         user.save()  
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')  
+        return HttpResponse('Thank you for your email confirmation. <a href="/auth">Click here</a> to SignIn.')  
     else:  
         return HttpResponse('Activation link is invalid!')  
+    
+    
